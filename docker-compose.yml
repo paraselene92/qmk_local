@@ -1,0 +1,12 @@
+services:
+  compile:
+    image: jonz94/qmk_firmware
+    working_dir: /qmk_firmware
+    volumes:
+      - ${QMK_LOCAL_USERSPACE}/keyboards:/qmk_firmware/keyboards
+      - ${QMK_LOCAL_USERSPACE}:/qmk_userspace
+      - ./.build:/qmk_firmware/.build
+    environment:
+      QMK_USERSPACE: /qmk_userspace
+    command: /bin/bash -c 'qmk compile -kb $$KEYBOARD -km $$KEYMAP'
+
