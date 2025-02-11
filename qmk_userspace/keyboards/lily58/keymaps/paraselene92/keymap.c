@@ -30,6 +30,7 @@ enum custom_keycodes {
   RAISE,
   ADJUST,
   OS_SPECIFIC,
+  OS_SPECIFIC2,
 };
 
 os_variant_t current_os = OS_UNSURE;
@@ -56,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS, \
   KC_LSFT, KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, JP_COLN, \
   KC_LCTL,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, JP_LBRC,  JP_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  JP_GRV, \
-                             KC_LALT, KC_DEL ,LOWER, KC_SPC,   KC_ENT,   RAISE,   KC_BSPC, KC_RGUI \
+                             KC_LALT, KC_DEL ,LOWER, KC_SPC,   KC_ENT,   RAISE,   KC_BSPC, OS_SPECIFIC2 \
 ),
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -251,6 +252,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
           default:
             tap_code(KC_GRV);
+            break;
+        }
+      }
+      return false;
+      break;
+    case OS_SPECIFIC2:
+      if (record->event.pressed) {
+        switch (current_os) {
+          case OS_MACOS:
+            register_code(KC_LCTL);
+            register_code(KC_LSFT);
+            tap_code(KC_SPC);
+            unregister_code(KC_LCTL);
+            unregister_code(KC_LSFT);
+            break;
+          default:
+            tap_code(KC_RGUI);
             break;
         }
       }
